@@ -25,6 +25,25 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <!-- Add these in your head section -->
+    <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://*.dropbox.com https://*.dropboxusercontent.com 
+        https://code.jquery.com https://stackpath.bootstrapcdn.com 
+        https://cdnjs.cloudflare.com 'unsafe-inline' 'unsafe-eval';
+    style-src 'self' https://*.dropbox.com https://*.dropboxusercontent.com 
+        https://cdnjs.cloudflare.com 'unsafe-inline';
+    img-src 'self' https://*.dropbox.com https://*.dropboxusercontent.com 
+        https://dl.dropboxusercontent.com https://cdnjs.cloudflare.com data:;
+    font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:;
+    connect-src 'self' https://*.dropbox.com https://*.dropboxusercontent.com 
+        https://api.dropboxapi.com;
+    frame-src 'self' https://*.dropbox.com;
+">
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="51">
@@ -40,7 +59,7 @@
             <div class="navbar-nav ml-auto py-0">
                 <a href="#home" class="nav-item nav-link active"> Home</a>
                 <a href="#about" class="nav-item nav-link">About</a>
-                <a href="#event" class="nav-item nav-link">Event</a>
+                <!-- <a href="#event" class="nav-item nav-link">Event</a> -->
 
             </div>
             <a href="index.html" class="navbar-brand mx-5 d-none d-lg-block">
@@ -49,7 +68,7 @@
             <div class="navbar-nav mr-auto py-0">
 
                 <a href="#gallery" class="nav-item nav-link">Gallery</a>
-                <a href="#rsvp" class="nav-item nav-link">RSVP</a>
+                <!-- <a href="#rsvp" class="nav-item nav-link">RSVP</a> -->
                 <a href="#contact" class="nav-item nav-link">Contact</a>
             </div>
         </div>
@@ -243,167 +262,70 @@
     <!-- About End -->
 
 
-
-    <!-- Event Start -->
-    <div class="container-fluid py-5" id="event">
-        <div class="container py-5">
-            <div class="section-title position-relative text-center">
-                <h6 class="text-uppercase text-primary mb-3" style="letter-spacing: 3px;">Event</h6>
-                <h1 class="font-secondary display-4">Our Wedding Event</h1>
-                <i class="far fa-heart text-dark"></i>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center">
-                    <h5 class="font-weight-normal text-muted mb-3 pb-3">Clita ipsum aliquyam dolor diam dolores elitr
-                        nonumy. Rebum sea vero ipsum eirmod tempor kasd. Diam amet lorem erat eos sit lorem elitr justo
-                    </h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 border-right border-primary">
-                    <div class="text-center text-md-right mr-md-3 mb-4 mb-md-0">
-                        <img class="img-fluid mb-4" src="img/event-1.jpg" alt="">
-                        <h4 class="mb-3">The Reception</h4>
-                        <p class="mb-2">123 Street, New York, USA</p>
-                        <p class="mb-0">12:00AM - 13:00PM</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-center text-md-left ml-md-3">
-                        <img class="img-fluid mb-4" src="img/event-2.jpg" alt="">
-                        <h4 class="mb-3">Wedding Party</h4>
-                        <p class="mb-2">123 Street, New York, USA</p>
-                        <p class="mb-0">12:00AM - 13:00PM</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Event End -->
-
-
     <!-- Gallery Start -->
-    <div class="container-fluid bg-gallery" id="gallery" style="padding: 120px 0; margin: 90px 0;">
+    <!-- Gallery Start -->
+    <div class="container-fluid bg-gallery" id="gallery" style="padding: 120px 0;">
         <div class="section-title position-relative text-center" style="margin-bottom: 120px;">
             <h6 class="text-uppercase text-primary mb-3" style="letter-spacing: 3px;">Gallery</h6>
-            <h1 class="font-secondary display-4 text-white">Our Photo Gallery</h1>
+            <h1 class="font-secondary display-4 text-white">Our Wedding Gallery</h1>
             <i class="far fa-heart text-white"></i>
         </div>
-        <div class="owl-carousel gallery-carousel">
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-1.jpg" alt="">
-                <a href="img/gallery-1.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
+
+        <!-- Upload Section -->
+        <div class="text-center mb-5">
+            <a href="https://www.dropbox.com/request/Sww7IKoLdVR4gql3ddnQ" target="_blank"
+                class="btn btn-primary btn-lg">
+                <i class="fas fa-cloud-upload-alt mr-2"></i> Upload Your Photos
+            </a>
+            <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
+
+            <!-- Upload Status (hidden by default) -->
+            <div id="uploadStatus" class="alert alert-success mt-3" style="display:none;">
+                Thank you for uploading your photos! They'll appear in the gallery shortly.
             </div>
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-2.jpg" alt="">
-                <a href="img/gallery-2.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
+        </div>
+
+        <!-- Gallery Container -->
+        <div class="container">
+            <!-- Loading Indicator -->
+            <div id="galleryLoading" class="text-center py-5">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p class="text-white mt-3">Loading precious memories...</p>
             </div>
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-3.jpg" alt="">
-                <a href="img/gallery-3.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
+
+            <!-- Gallery Content -->
+            <div class="owl-carousel gallery-carousel" id="photoGallery" style="display:none;">
+                <!-- Photos will be loaded here dynamically -->
             </div>
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-4.jpg" alt="">
-                <a href="img/gallery-4.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
-            </div>
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-5.jpg" alt="">
-                <a href="img/gallery-5.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
-            </div>
-            <div class="gallery-item">
-                <img class="img-fluid w-100" src="img/gallery-6.jpg" alt="">
-                <a href="img/gallery-6.jpg" data-lightbox="gallery">
-                    <i class="fa fa-2x fa-plus text-white"></i>
-                </a>
+
+            <!-- Empty State -->
+            <div id="emptyGallery" class="text-center py-5" style="display:none;">
+                <i class="far fa-images text-white fa-3x mb-3"></i>
+                <h4 class="text-white">No photos yet</h4>
+                <p class="text-white">Be the first to share your photos!</p>
             </div>
         </div>
     </div>
+
+
+
     <!-- Gallery End -->
 
-
-
-    <!-- RSVP Start -->
-    <div class="container-fluid py-5" id="rsvp">
-        <div class="container py-5">
-            <div class="section-title position-relative text-center">
-                <h6 class="text-uppercase text-primary mb-3" style="letter-spacing: 3px;">RSVP</h6>
-                <h1 class="font-secondary display-4">Join Our Wedding</h1>
-                <i class="far fa-heart text-dark"></i>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="text-center">
-                        <form action="https://formspree.io/f/xgvylwbw" method="POST">
-                            <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" name="name" class="form-control bg-secondary border-0 py-4 px-3"
-                                        placeholder="Your Name" required />
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="email" name="email"
-                                        class="form-control bg-secondary border-0 py-4 px-3" placeholder="Your Email"
-                                        required />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <select name="guests" class="form-control bg-secondary border-0"
-                                        style="height: 52px;" required>
-                                        <option disabled selected>Number of Guests</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <select name="attendance" class="form-control bg-secondary border-0"
-                                        style="height: 52px;" required>
-                                        <option disabled selected>I'm Attending</option>
-                                        <option>All Events</option>
-                                        <option>Wedding Party</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <textarea name="message" class="form-control bg-secondary border-0 py-2 px-3" rows="5"
-                                    placeholder="Message" required></textarea>
-                            </div>
-                            <div>
-                                <button class="btn btn-primary font-weight-bold py-3 px-5" type="submit">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- RSVP End -->
-
-
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-white py-5" id="contact" style="margin-top: 90px;">
+    <div class="container-fluid bg-dark text-white py-5" id="contact">
         <div class="container text-center py-5">
             <div class="section-title position-relative text-center">
                 <h1 class="font-secondary display-3 text-white">Thank You</h1>
                 <i class="far fa-heart text-white"></i>
             </div>
-            <div class="d-flex justify-content-center py-2">
+            <!-- <div class="d-flex justify-content-center py-2">
                 <p class="text-white" href="#">info@example.com</p>
                 <span class="px-3">|</span>
                 <p class="text-white" href="#">+012 345 6789</p>
-            </div>
-            <p class="m-0">&copy; <a class="text-primary" href="#"></a>2025 by Githma Amar. All rights reserved.
+            </div> -->
+            <p class="m-0">&copy; <a class="text-primary" href="#"></a>2025 by Githma Amarasinghe. All rights reserved.
             </p>
         </div>
     </div>
@@ -426,6 +348,7 @@
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="lib/isotope/isotope.pkgd.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
+    
     <!-- Countdown Script -->
     <script>
         const weddingDate = new Date("Sep 4, 2025 00:00:00").getTime();
@@ -451,6 +374,118 @@
         }, 1000);
     </script>
     <!-- Template Javascript -->
+    <!-- JavaScript to handle gallery functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check URL for upload success
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('uploadSuccess')) {
+                document.getElementById('uploadStatus').style.display = 'block';
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Initialize Dropbox
+            const dbx = new Dropbox.Dropbox({
+                accessToken: 'sl.u.AF4mThajkvrrknLEqwIxEbRYpwveCoet1WoWFImuD3YCN53-_IeWT_wp3EUJ4AHEZpLDS5ywyWj0Bc4W2Gl3lzGO5_rGN93DUAzkkI2wdqVbV3gWGr267mx2FZYYl3yVLXE66wDHf2u0dbBAIYcIFuVqQPVPnYBpho7MTQ9EauCSYcFRFGv80Rd4rs1U6BguHvVvUi4JoOXAiyQlKGk0AlOBOW14TOsYo5-x-YWRWKewMUmLaiQjnvEPigpWuZBgEKwe-UYX-gkCXcIKq25sc0lDdR4XhGRwm0-Pt22pS1KZu5mnh-kuDpGnDsC8giXaUQEu2_2Omi5pN7zDr2i5M5FoqmyZG61ZSrk1ykzZxHSmcI4QA6rUp_mIo27P1LiCKPVcJG7lyxeeVBTVlQOJxi6w9paRFR_BewXUPPkMlNXxpdYLCfdNJfM2vEYpMWzcEKeZioJ8Jtre8GbJsY1NAudoh98L6j2HklKzACy7F0vT8ZVKzutDoPBpbwDWKUf3ue1uR4GtHfxkq-33M9JkqZgGL6Yf7MKmDKUWc4LLDWnbE2Bc9BWrUV5uXuoOOa3FsOeA_aKjjRVmwb7Hh1iGSiFMb0qgJtKT53UI5OYBNoLxFLOpA0L6ULuxzhVMpd_iCJdoknWiIaE7UTrfj25WCQre11G65rJs9UQCaYxE-BWFnLSNHvDVT7BQPmD5OsMgeRbVP9h_xYS7mYNmPvx682uxsMxgrZY3Rpju2StY_wowt670vPgdPy3m7Q9VMLl0MDLUQT9zZztjlh3Rgkt-OUTbBQDTk2He4AE3D5na8EizEHHmFa8sda1vKVGau_AJPEzCqYR6SDRxGylQSjlK5wOkpU68hZtfcpmYYU7z3R-Ok_8tJtDeg_FDGBsGP9u__5JE6m8n3tzNf-3SXYJvRjnQj5V6PD5WzzEtKJsMYIhN_fKddUxuSH5mp8Kp5vsu4jcGTelG9JDxzoeU7aQa_cTAthtRUHbaBWRpPGHFhN9T056D3kRarabpQT3lDxQFObv1rprfHkDhQsU7252OVlsWmiUEep5UbeP35p06kVwd4gjp69eJqWgdX_wqE4UjUYd30ZfL4fAO28V5zz8qIYuGrAI0nb2U1k_8VRKJe0Vx1QqkKb-RgSp829-berICiVWzbKP2WGGdPFMp5ebJfoO3_Kjpa0ZHq_X6kMT9qyP8R_4CvVdRaphcHkulCy6uWcbFDlDHwZ14YDZxLlVumSHYt2WXUk1xBfxKENEMSmV-mzFv3aVR5Zv9rWyTNsgo2USchsD6J3FFBMrJEKBE0KtSy2j-KfQxtvMOmLrOWw1RGw' // REPLACE WITH YOUR TOKEN
+            });
+
+            loadGalleryPhotos(dbx);
+        });
+
+        async function loadGalleryPhotos(dbx) {
+            const gallery = document.getElementById('photoGallery');
+            const loading = document.getElementById('galleryLoading');
+            const empty = document.getElementById('emptyGallery');
+
+            try {
+                console.log("Loading photos from Dropbox...");
+
+
+
+                // List files in the folder
+                const response = await dbx.filesListFolder({
+                    path: '/File requests/Wedding Photos', // Try '/Wedding Photos' if using a specific folder
+                    limit: 100
+                });
+
+                console.log("Dropbox response:", response);
+                const entries = response.result.entries;  // ✅ unwrap the data
+
+                if (!entries || entries.length === 0) {
+                    throw new Error("No photos found in Dropbox folder");
+                }
+
+
+                loading.style.display = 'none';
+                let galleryHTML = '';
+                let loadedPhotos = 0;
+
+                for (const entry of entries) {
+                    if (entry['.tag'] === 'file' && /\.(jpg|jpeg|png)$/i.test(entry.name)) {
+                        try {
+                            const linkRes = await dbx.filesGetTemporaryLink({
+                                path: entry.path_lower   // ✅ use path_lower (safer than id)
+                            });
+
+                            galleryHTML += `
+                <div class="gallery-item">
+                    <img class="img-fluid w-100" src="${linkRes.result.link}" loading="lazy" alt="Wedding photo">
+                    <a href="${linkRes.result.link}" data-lightbox="gallery">
+                        <i class="fa fa-2x fa-plus text-white"></i>
+                    </a>
+                </div>
+            `;
+                            loadedPhotos++;
+                        } catch (e) {
+                            console.error("Error loading image:", entry.name, e);
+                        }
+                    }
+                }
+
+
+                if (loadedPhotos > 0) {
+                    gallery.innerHTML = galleryHTML;
+                    gallery.style.display = 'block';
+
+                    // Initialize carousel
+                    $('.gallery-carousel').owlCarousel({
+                        items: 3,
+                        loop: true,
+                        margin: 20,
+                        autoplay: true,
+                        responsive: {
+                            0: { items: 1 },
+                            768: { items: 2 },
+                            992: { items: 3 }
+                        }
+                    });
+
+                    // Initialize lightbox
+                    lightbox.option({
+                        'resizeDuration': 200,
+                        'wrapAround': true
+                    });
+                } else {
+                    empty.style.display = 'block';
+                    empty.innerHTML = `
+                    <i class="far fa-images text-white fa-3x mb-3"></i>
+                    <h4 class="text-white">No photos found</h4>
+                    <p class="text-white">We couldn't find any photos in the Dropbox folder</p>
+                `;
+                }
+
+            } catch (error) {
+                console.error("Gallery loading error:", error);
+                loading.style.display = 'none';
+                empty.style.display = 'block';
+                empty.innerHTML = `
+                <i class="fas fa-exclamation-triangle text-white fa-3x mb-3"></i>
+                <h4 class="text-white">Error loading gallery</h4>
+                <p class="text-white">${error.message || 'Please check console for details'}</p>
+            `;
+            }
+        }
+    </script>
     <script src="js/main.js"></script>
 </body>
 

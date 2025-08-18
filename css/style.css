@@ -6051,6 +6051,7 @@ a.close.disabled {
   color: #fff;
   text-align: center;
 }
+
 @keyframes spinner-border {
   to {
     transform: rotate(360deg);
