@@ -206,147 +206,147 @@ figure {
   margin: 0 0 1rem;
 }
 
- .bg-gallery {
-            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
-                       url('https://images.unsplash.com/photo-1532712938310-34cb3982ef74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
-            background-size: cover;
-            background-position: center;
-            padding: 80px 0;
-        }
-        
-        .section-title h6 {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-        
-        .gallery-img {
-            height: 280px;
-            object-fit: cover;
-            width: 100%;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .gallery-img:hover {
-            transform: scale(1.03);
-        }
-        
-        .upload-btn {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            padding: 14px 30px;
-            font-weight: 600;
-            border-radius: 50px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-        
-        .upload-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-        }
-        
-        .drag-area {
-            border: 2px dashed #ccc;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-            border-radius: 10px;
-            background: #f9f9f9;
-        }
-        
-        .drag-area.active {
-            border-color: var(--primary-color);
-            background-color: rgba(212, 175, 55, 0.05);
-        }
-        
-        .thumbnail-container {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .thumbnail-remove {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ff4d4d;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 12px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        .glide__arrow {
-            background: var(--primary-color);
-            border: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        
-        .glide__arrow:hover {
-            background: var(--secondary-color);
-        }
-        
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-        
-        /* Mobile Responsive Adjustments */
-        @media (max-width: 768px) {
-            .bg-gallery {
-                padding: 60px 0;
-            }
-            
-            .gallery-img {
-                height: 200px;
-            }
-            
-            .glide__slide {
-                padding: 5px;
-            }
-            
-            .drag-area {
-                padding: 20px 15px;
-            }
-            
-            .drag-area header {
-                font-size: 16px;
-            }
-            
-            .upload-btn {
-                padding: 12px 25px;
-                font-size: 16px;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .section-title h1 {
-                font-size: 2.2rem;
-            }
-            
-            .gallery-img {
-                height: 180px;
-            }
-            
-            .glide__arrow {
-                width: 35px;
-                height: 35px;
-            }
-        }
+.bg-gallery {
+  background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
+    url('https://images.unsplash.com/photo-1532712938310-34cb3982ef74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 80px 0;
+}
+
+.section-title h6 {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.gallery-img {
+  height: 280px;
+  object-fit: cover;
+  width: 100%;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-img:hover {
+  transform: scale(1.03);
+}
+
+.upload-btn {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  padding: 14px 30px;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.upload-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.drag-area {
+  border: 2px dashed #ccc;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.drag-area.active {
+  border-color: var(--primary-color);
+  background-color: rgba(212, 175, 55, 0.05);
+}
+
+.thumbnail-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.thumbnail-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4d4d;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.glide__arrow {
+  background: var(--primary-color);
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.glide__arrow:hover {
+  background: var(--secondary-color);
+}
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .bg-gallery {
+    padding: 60px 0;
+  }
+
+  .gallery-img {
+    height: 200px;
+  }
+
+  .glide__slide {
+    padding: 5px;
+  }
+
+  .drag-area {
+    padding: 20px 15px;
+  }
+
+  .drag-area header {
+    font-size: 16px;
+  }
+
+  .upload-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-title h1 {
+    font-size: 2.2rem;
+  }
+
+  .gallery-img {
+    height: 180px;
+  }
+
+  .glide__arrow {
+    width: 35px;
+    height: 35px;
+  }
+}
 
 .section-title h6 {
   color: var(--primary-color);
