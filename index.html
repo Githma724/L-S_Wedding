@@ -128,7 +128,7 @@
                             </div>
                         </div>
                     </div>
-                   
+
                     <!-- Countdown at bottom -->
                     <div class="position-absolute w-100 text-center" style="bottom: 80px;z-index: 10;">
                         <h2 class="font-secondary display-4 mb-4">04 September 2025</h2>
@@ -364,7 +364,7 @@
         // Fetch all images via serverless function
         async function fetchImages() {
             try {
-                const res = await fetch("/.netlify/functions/get-images");
+                const res = await fetch("/.netlify/functions/get-images"); // call your serverless function
                 const images = await res.json();
                 if (!Array.isArray(images)) return;
                 gallery.innerHTML = "";
@@ -375,10 +375,9 @@
                     gallery.appendChild(img);
                 });
             } catch (err) {
-                console.error(err);
+                console.error("Error fetching gallery images:", err);
             }
         }
-
 
         // Initial gallery load
         fetchImages();
