@@ -82,16 +82,16 @@
                             <div class="d-inline-block border-top border-bottom border-light py-3 px-4">
                                 <h3 class="text-uppercase font-weight-normal text-white m-0"
                                     style="letter-spacing: 2px;">
-                                    We're getting married
+                                    Happily married
                                 </h3>
                             </div>
                         </div>
                     </div>
 
                     <!-- Countdown at bottom -->
-                    <div class="position-absolute w-100 text-center" style="bottom: 80px;">
-                        <h2 class="font-secondary text-white  mb-4">Countdown</h2>
-                        <div id="countdown" class="d-flex justify-content-center flex-wrap">
+                    <div class="position-absolute w-100 text-center" style="bottom: 80px;z-index: 10;">
+                        <h2 class="font-secondary display-4 mb-4">04 September 2025</h2>
+                        <!-- <div id="countdown" class="d-flex justify-content-center flex-wrap">
                             <div class="text-white mx-3">
                                 <div style="font-size: 1.8rem; font-weight: 600;" id="days1">0</div>
                                 <div style="font-size: 0.8rem;">Days</div>
@@ -108,7 +108,7 @@
                                 <div style="font-size: 1.8rem; font-weight: 600;" id="seconds1">0</div>
                                 <div style="font-size: 0.8rem;">Seconds</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -128,11 +128,11 @@
                             </div>
                         </div>
                     </div>
-
+                   
                     <!-- Countdown at bottom -->
-                    <div class="position-absolute w-100 text-center" style="bottom: 80px;">
-                        <h2 class="font-secondary text-white  mb-4">Countdown</h2>
-                        <div id="countdown" class="d-flex justify-content-center flex-wrap">
+                    <div class="position-absolute w-100 text-center" style="bottom: 80px;z-index: 10;">
+                        <h2 class="font-secondary display-4 mb-4">04 September 2025</h2>
+                        <!-- <div id="countdown" class="d-flex justify-content-center flex-wrap">
                             <div class="text-white mx-3">
                                 <div style="font-size: 1.8rem; font-weight: 600;" id="days2">0</div>
                                 <div style="font-size: 0.8rem;">Days</div>
@@ -149,7 +149,7 @@
                                 <div style="font-size: 1.8rem; font-weight: 600;" id="seconds2">0</div>
                                 <div style="font-size: 0.8rem;">Seconds</div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -210,11 +210,7 @@
                                 class="fa fa-male text-primary pr-3"></i>Loshana</h3>
                         <div class="position-relative">
                             <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
-                                    class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
                                     class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
-                                    class="fab fa-linkedin-in"></i></a>
                             <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
@@ -237,11 +233,7 @@
                                 class="fa fa-female text-primary pr-3"></i>Sineka</h3>
                         <div class="position-relative">
                             <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
-                                    class="fab fa-instagram"></i></a>
-                            <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
                                     class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-primary btn-square mr-1" href="#"><i
-                                    class="fab fa-linkedin-in"></i></a>
                             <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
@@ -253,18 +245,31 @@
 
 
     <!-- Gallery Start -->
+    <!-- Gallery Section -->
     <div class="container-fluid bg-gallery" id="gallery">
         <div class="section-title position-relative text-center" style="margin-bottom: 80px;">
-            <h6 class="text-uppercase mb-3" style="letter-spacing: 3px;">Gallery</h6>
+            <h3 class="text-uppercase  mb-3 " style="padding-top: 20px;letter-spacing: 3px;">Gallery</h3>
             <h1 class="font-secondary display-4 text-white">Our Wedding Gallery</h1>
             <i class="far fa-heart text-white"></i>
         </div>
 
-        <button id="uploadBtn">Upload Photos</button>
+        <!-- <div class="text-center mb-5">
+            <button id="uploadBtn"
+                class="inline-flex items-center px-6 py-3 bg-pink-500 text-white font-semibold rounded-full shadow-lg hover:bg-pink-600 transition-all duration-300">
+                <i class="fas fa-camera mr-2"></i> Upload Photos
+            </button>
+        </div> -->
+        <div class="text-center mb-5">
+            <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full" data-bs-toggle="modal"
+                data-bs-target="#uploadModal">
+                <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
+            </button>
+            <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
+        </div>
 
-        <!-- Gallery Container -->
-        <div id="gallery"></div>
+        <div id="wedding-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 px-5 pb-10"></div>
     </div>
+
     <!-- Gallery End -->
 
     <!-- Footer Start -->
@@ -309,7 +314,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
 
     <!-- Countdown Script -->
-    <script>
+    <!-- <script>
         const weddingDate = new Date("Sep 4, 2025 00:00:00").getTime();
 
         function updateCountdown(daysId, hoursId, minutesId, secondsId) {
@@ -331,35 +336,55 @@
             updateCountdown("days1", "hours1", "minutes1", "seconds1");
             updateCountdown("days2", "hours2", "minutes2", "seconds2");
         }, 1000);
-    </script>
+    </script> -->
 
 
-    <script src="https://cdn.upload.io/widget.js"></script>
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
     <script>
-        const uploadBtn = document.getElementById('uploadBtn');
-        const galleryContainer = document.getElementById('gallery');
+        const gallery = document.getElementById("wedding-gallery");
 
-        // Initialize the Upload.io widget
-        const upload = new Upload({
-            apiKey: 'public_G22nhthCDRHzS2cc3dNdDL3rF8f5', // Replace with your Upload.io API key
-            multiple: true,
-            onComplete: (files) => {
-                // Display uploaded images in the gallery
-                files.forEach(file => {
-                    const img = document.createElement('img');
-                    img.src = file.url;
-                    img.alt = file.name;
-                    img.style.width = '100px';
-                    img.style.margin = '5px';
-                    galleryContainer.appendChild(img);
+        // Upload button
+        const uploadBtn = document.getElementById("uploadBtn");
+        uploadBtn.addEventListener("click", () => {
+            const widget = cloudinary.createUploadWidget({
+                cloudName: "dxpxhp9vw",
+                uploadPreset: "wedding_gallery_preset", // unsigned preset
+                sources: ["local", "camera", "url"],
+                multiple: true,
+                folder: "wedding_gallery",
+                tags: ["wedding"]
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                    fetchImages(); // Refresh gallery after upload
+                }
+            });
+            widget.open();
+        });
+
+        // Fetch all images via serverless function
+        async function fetchImages() {
+            try {
+                const res = await fetch("/.netlify/functions/get-images");
+                const images = await res.json();
+                if (!Array.isArray(images)) return;
+                gallery.innerHTML = "";
+                images.forEach(url => {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
+                    gallery.appendChild(img);
                 });
+            } catch (err) {
+                console.error(err);
             }
-        });
+        }
 
-        // Open the upload widget when the button is clicked
-        uploadBtn.addEventListener('click', () => {
-            upload.open();
-        });
+
+        // Initial gallery load
+        fetchImages();
+
+        // Optional: auto-refresh every 15 seconds
+        setInterval(fetchImages, 15000);
     </script>
     <script src="js/main.js"></script>
 </body>
