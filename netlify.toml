@@ -1,0 +1,6 @@
+[build]
+  publish = "."          # Root folder (index.html is here)
+  functions = "functions" # Folder with get-images.js
+
+[dev]
+  functions = "functions"
