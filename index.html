@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css">
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
     <!-- Add these in your head section -->
     <script src="https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -79,7 +82,8 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3 text-center" style="max-width: 900px;">
                             <h1 class="display-1 font-secondary text-white mt-n3 mb-md-4">Sineka & Loshana</h1>
-                            <div class="d-inline-block border-top border-bottom border-light py-3 px-4" style="width: 100%;">
+                            <div class="d-inline-block border-top border-bottom border-light py-3 px-4"
+                                style="width: 100%;">
                                 <h3 class="text-uppercase font-weight-normal text-white m-0"
                                     style="letter-spacing: 2px;">
                                     Our Wedding<br> Memories
@@ -120,12 +124,13 @@
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3 text-center" style="max-width: 900px;">
                             <h1 class="display-1 font-secondary text-white mt-n3 mb-md-4">Sineka & Loshana</h1>
-                            <div class="d-inline-block border-top border-bottom border-light py-3 px-4" style="width: 100%;">
+                            <div class="d-inline-block border-top border-bottom border-light py-3 px-4"
+                                style="width: 100%;">
                                 <h3 class="text-uppercase font-weight-normal text-white m-0"
                                     style="letter-spacing: 2px;">
                                     Our Wedding<br> Memories
                                 </h3>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -156,12 +161,14 @@
             </div>
 
             <!-- Carousel Controls -->
-            <a class="carousel-control-prev justify-content-start" href="#header-carousel" data-slide="prev" style="padding-top: 50px;">
+            <a class="carousel-control-prev justify-content-start" href="#header-carousel" data-slide="prev"
+                style="padding-top: 50px;">
                 <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
                     <span class="carousel-control-prev-icon mt-3"></span>
                 </div>
             </a>
-            <a class="carousel-control-next justify-content-end" href="#header-carousel" data-slide="next" style="padding-top: 50px;">
+            <a class="carousel-control-next justify-content-end" href="#header-carousel" data-slide="next"
+                style="padding-top: 50px;">
                 <div class="btn btn-primary px-0" style="width: 68px; height: 68px;">
                     <span class="carousel-control-next-icon mt-3"></span>
                 </div>
@@ -377,12 +384,30 @@
                 const images = await res.json();
                 if (!Array.isArray(images)) return;
                 gallery.innerHTML = "";
+                // images.forEach(url => {
+                //     const img = document.createElement("img");
+                //     img.src = url;
+                //     img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
+                //     gallery.appendChild(img);
+                // });
+                // Add images as <a> links for lightbox
                 images.forEach(url => {
+                    const link = document.createElement("a");
+                    link.href = url;             // full-size image
+                    link.className = "glightbox";
+
                     const img = document.createElement("img");
-                    img.src = url;
+                    img.src = url;               // thumbnail
                     img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
-                    gallery.appendChild(img);
+
+                    link.appendChild(img);
+                    gallery.appendChild(link);
                 });
+
+                // Re-initialize lightbox each time
+                if (lightbox) lightbox.destroy(); // destroy previous instance
+                lightbox = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, zoomable: true });
+
             } catch (err) {
                 console.error("Error fetching gallery images:", err);
             }
