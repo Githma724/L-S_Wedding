@@ -4,7 +4,7 @@ export async function handler() {
     const API_KEY = '453425982124397';
     const API_SECRET = '9WciSoAShunPJ0Y9x7nO9826Auw';
     try {
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/image/upload?prefix=wedding_gallery`, {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/image/upload?prefix=wedding_gallery&max_results=100`, {
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${API_KEY}:${API_SECRET}`).toString('base64')
             }
