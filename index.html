@@ -255,7 +255,6 @@
 
         <!-- Upload button -->
         <div class="text-center mb-5">
-            <input type="file" id="fileUpload" accept="image/*" hidden multiple>
             <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full">
                 <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
             </button>
@@ -335,36 +334,26 @@
 
 
     <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-    <script>
+    <!-- <script>
         const gallery = document.getElementById("wedding-gallery");
         const uploadBtn = document.getElementById("uploadBtn");
-        const fileUpload = document.getElementById("fileUpload");
+       
 
-        // Open file picker when button clicked
         uploadBtn.addEventListener("click", () => {
-            fileUpload.click();
-        });
-
-        // Handle file selection
-        fileUpload.addEventListener("change", async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            // Upload to Cloudinary unsigned preset
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "wedding_gallery_preset"); // use your unsigned preset
-            formData.append("folder", "wedding_gallery");
-
-            const res = await fetch("https://api.cloudinary.com/v1_1/dxpxhp9vw/image/upload", {
-                method: "POST",
-                body: formData
+            const widget = cloudinary.createUploadWidget({
+                cloudName: "dxpxhp9vw",
+                uploadPreset: "wedding_gallery_preset", // unsigned preset
+                sources: ["local", "camera", "url"],
+                multiple: true,
+                folder: "wedding_gallery",
+                tags: ["wedding"]
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                    fetchImages(); // Refresh gallery after upload
+                }
             });
-
-            const data = await res.json();
-            console.log("Uploaded:", data.secure_url);
-
-            fetchImages(); // refresh gallery after upload
+            widget.open();
+            
         });
         // Fetch all images via serverless function
         async function fetchImages() {
@@ -388,6 +377,93 @@
         fetchImages();
 
         // Optional: auto-refresh every 15 seconds
+        setInterval(fetchImages, 15000);
+    </script> -->
+    <script>
+        const gallery = document.getElementById("wedding-gallery");
+        const uploadBtn = document.getElementById("uploadBtn");
+        const progressBar = document.getElementById("uploadProgress");
+
+        // Create Cloudinary widget ONCE
+        const widget = cloudinary.createUploadWidget({
+            cloudName: "dxpxhp9vw",
+            uploadPreset: "wedding_gallery_preset",
+            sources: ["local", "camera", "url"],
+            multiple: true,
+            folder: "wedding_gallery",
+            tags: ["wedding"],
+            styles: {
+                palette: {
+                    window: "#ffffff",
+                    sourceBg: "#f4f4f4",
+                    windowBorder: "#90a0b3",
+                    tabIcon: "#000000",
+                    menuIcons: "#555a5f",
+                    textDark: "#000000",
+                    textLight: "#ffffff",
+                    link: "#0078ff",
+                    action: "#0078ff",
+                    inactiveTabIcon: "#cccccc",
+                    error: "#f44235",
+                    inProgress: "#0078ff",
+                    complete: "#20b832",
+                    sourceBorder: "#dddddd",
+                    sourceBorderHover: "#aaaaaa",
+                    buttons: "#0078ff"
+                },
+                fonts: {
+                    "'Poppins', sans-serif": "https://fonts.googleapis.com/css?family=Poppins"
+                }
+            }
+        },
+            (error, result) => {
+                if (error) {
+                    console.error("Upload error:", error);
+                    return;
+                }
+                // Upload in progress
+                if (result.event === "upload-added") {
+                    progressBar.style.width = "0%";
+                    progressBar.parentElement.style.display = "block";
+                }
+                if (result.event === "upload-progress") {
+                    progressBar.style.width = result.info.bytes_transferred / result.info.bytes_total * 100 + "%";
+                }
+                if (result.event === "success") {
+                    console.log("Uploaded:", result.info.secure_url);
+                    fetchImages(); // refresh gallery
+                    progressBar.style.width = "100%";
+                    setTimeout(() => progressBar.parentElement.style.display = "none", 1000);
+                }
+            }
+        );
+
+        // Button opens widget
+        uploadBtn.addEventListener("click", () => {
+            widget.open();
+        }, false);
+
+        // Fetch gallery images
+        async function fetchImages() {
+            try {
+                const res = await fetch("/.netlify/functions/get-images");
+                const images = await res.json();
+                if (!Array.isArray(images)) return;
+
+                gallery.innerHTML = "";
+                images.forEach(url => {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
+                    gallery.appendChild(img);
+                });
+            } catch (err) {
+                console.error("Error fetching gallery images:", err);
+            }
+        }
+
+        // Initial load + auto refresh
+        fetchImages();
         setInterval(fetchImages, 15000);
     </script>
     <script src="js/main.js"></script>
