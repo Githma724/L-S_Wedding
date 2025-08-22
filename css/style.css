@@ -236,26 +236,17 @@ figure {
   margin-bottom: 1rem;
   border-radius: 0.75rem;
   transition: transform 0.3s;
-
-  /* Only remove tap highlight */
   -webkit-tap-highlight-color: transparent;
-
-  /* Remove outline on focus for keyboard nav (optional) */
   outline: none;
-
-  /* Keep user-select normal so touch/click works */
-  user-select: auto;
-  -webkit-user-select: auto;
-  -moz-user-select: auto;
-
-  /* Remove the overly restrictive touch-action */
-  touch-action: auto;
-
-  cursor: pointer; /* indicates clickable */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  touch-action: manipulation;
 }
 
-#wedding-gallery img:hover {
-  transform: scale(1.05);
+#wedding-gallery img:hover,
+#wedding-gallery img:active {
+  transform: scale(1.08);
 }
 
 svg {
