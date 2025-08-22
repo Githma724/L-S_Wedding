@@ -260,93 +260,11 @@
             <i class="far fa-heart text-white"></i>
         </div>
 
-        <!-- Upload Section -->
-        <div class="text-center mb-5">
-            <button class="btn btn-primary btn-lg upload-btn" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
-            </button>
-            <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
-        </div>
+        <button id="uploadBtn">Upload Photos</button>
 
         <!-- Gallery Container -->
-        <div class="container">
-            <!-- Loading Indicator -->
-            <div id="galleryLoading" class="text-center py-5">
-                <div class="spinner-border text-light" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="text-white mt-3">Loading precious memories...</p>
-            </div>
-
-            <!-- Gallery Content -->
-            <div class="glide" id="photoGallery" style="display: none;">
-                <div class="glide__track" data-glide-el="track">
-                    <div class="glide__slides" id="gallerySlides">
-                        <!-- Images will be loaded here dynamically -->
-                    </div>
-                </div>
-                <div class="glide__arrows" data-glide-el="controls">
-                    <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyGallery" class="text-center py-5" style="display: none;">
-                <i class="far fa-images text-white fa-3x mb-3"></i>
-                <h4 class="text-white">No photos yet</h4>
-                <p class="text-white">Be the first to share your photos!</p>
-            </div>
-        </div>
+        <div id="gallery"></div>
     </div>
-
-    <!-- Upload Modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Upload Your Photos</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="drag-area mb-3">
-                        <div class="icon"><i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i></div>
-                        <header>Drag & Drop to Upload<br></header>
-                        <span>OR<br></span>
-                        <button class="btn btn-outline-primary mt-3" id="browseBtn">Browse Files</button>
-                        <input type="file" id="fileInput" hidden accept="image/*" multiple>
-                    </div>
-                    <div class="progress mb-3" style="display: none;">
-                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100">0%</div>
-                    </div>
-                    <div id="uploadStatus" class="alert alert-info" style="display: none;"></div>
-                    <div id="uploadedImages" class="row g-2"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="submitUpload" disabled>Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast for notifications -->
-    <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive"
-        aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body" id="toastMessage">
-                Upload successful!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                aria-label="Close"></button>
-        </div>
-    </div>
-
     <!-- Gallery End -->
 
     <!-- Footer Start -->
@@ -361,7 +279,8 @@
                 <span class="px-3">|</span>
                 <p class="text-white" href="#">+012 345 6789</p>
             </div> -->
-            <p class="m-0">&copy; <a class="text-primary" href="#"></a>2025 by Githma Amarasinghe. All rights reserved.
+            <p class="m-0">&copy; <a class="text-primary" href="#"></a>2025 by Githma Amarasinghe. All rights
+                reserved.
             </p>
         </div>
     </div>
@@ -415,376 +334,32 @@
     </script>
 
 
+    <script src="https://cdn.upload.io/widget.js"></script>
     <script>
-        // Your ImgBB API Key - Replace with your actual key
-        const IMGBB_API_KEY = 'c7fc5f4db439684c601d19a7d6abd781';
-        // Global variables
-        let glide = null;
-        let toast = null;
+        const uploadBtn = document.getElementById('uploadBtn');
+        const galleryContainer = document.getElementById('gallery');
 
-        // Initialize elements when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize Toast
-            const toastEl = document.querySelector('.toast');
-            toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-
-            // DOM elements
-            const dragArea = document.querySelector('.drag-area');
-            const fileInput = document.getElementById('fileInput');
-            const browseBtn = document.getElementById('browseBtn');
-            const progressBar = document.querySelector('.progress');
-            const progressBarInner = document.querySelector('.progress-bar');
-            const submitBtn = document.getElementById('submitUpload');
-            const uploadedImagesContainer = document.getElementById('uploadedImages');
-            const uploadStatus = document.getElementById('uploadStatus');
-
-            let uploadedImages = [];
-
-            // Event listeners
-            browseBtn.addEventListener('click', () => {
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', function () {
-                handleFiles(this.files);
-            });
-
-            // Drag and drop events
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dragArea.addEventListener(eventName, preventDefaults, false);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dragArea.addEventListener(eventName, highlight, false);
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                dragArea.addEventListener(eventName, unhighlight, false);
-            });
-
-            function highlight() {
-                dragArea.classList.add('active');
-            }
-
-            function unhighlight() {
-                dragArea.classList.remove('active');
-            }
-
-            dragArea.addEventListener('drop', handleDrop, false);
-
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                handleFiles(files);
-            }
-
-            function handleFiles(files) {
-                if (files.length === 0) return;
-
-                // Check if total files exceed 10
-                if (uploadedImages.length + files.length > 10) {
-                    showToast('Maximum 10 photos allowed per upload', 'danger');
-                    return;
-                }
-
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-
-                    // Check if file is an image
-                    if (!file.type.match('image.*')) {
-                        showToast('Please upload only image files', 'danger');
-                        continue;
-                    }
-
-                    // Check file size (ImgBB limit is 32MB for free accounts)
-                    if (file.size > 32 * 1024 * 1024) {
-                        showToast(`File "${file.name}" is too large. Maximum size is 32MB`, 'danger');
-                        continue;
-                    }
-
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        const result = e.target.result;
-
-                        // Create thumbnail preview
-                        const col = document.createElement('div');
-                        col.className = 'col-4 mb-3';
-
-                        const thumbnailContainer = document.createElement('div');
-                        thumbnailContainer.className = 'thumbnail-container';
-
-                        const img = document.createElement('img');
-                        img.src = result;
-                        img.className = 'img-thumbnail w-100';
-                        img.style.height = '100px';
-                        img.style.objectFit = 'cover';
-
-                        const removeBtn = document.createElement('div');
-                        removeBtn.className = 'thumbnail-remove';
-                        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-                        removeBtn.onclick = function () {
-                            // Find and remove the image from uploadedImages
-                            const index = uploadedImages.findIndex(item => item.preview === result);
-                            if (index !== -1) {
-                                uploadedImages.splice(index, 1);
-                            }
-                            // Safely remove the column element
-                            if (col.parentNode === uploadedImagesContainer) {
-                                uploadedImagesContainer.removeChild(col);
-                            }
-                            toggleSubmitButton();
-                        };
-
-                        thumbnailContainer.appendChild(img);
-                        thumbnailContainer.appendChild(removeBtn);
-                        col.appendChild(thumbnailContainer);
-                        uploadedImagesContainer.appendChild(col);
-
-                        // Store file and preview for upload
-                        uploadedImages.push({
-                            file: file,
-                            preview: result
-                        });
-
-                        toggleSubmitButton();
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            function toggleSubmitButton() {
-                submitBtn.disabled = uploadedImages.length === 0;
-            }
-
-            // Submit uploads to ImgBB
-            submitBtn.addEventListener('click', async function () {
-                if (uploadedImages.length === 0) return;
-
-                progressBar.style.display = 'block';
-                submitBtn.disabled = true;
-                uploadStatus.style.display = 'none';
-
-                const uploadedUrls = [];
-
-                // Upload each image to ImgBB
-                for (let i = 0; i < uploadedImages.length; i++) {
-                    const image = uploadedImages[i];
-                    const progress = Math.floor(((i + 1) / uploadedImages.length) * 100);
-
-                    progressBarInner.style.width = `${progress}%`;
-                    progressBarInner.setAttribute('aria-valuenow', progress);
-                    progressBarInner.textContent = `${progress}%`;
-
-                    try {
-                        const imgbbUrl = await uploadToImgBB(image.file);
-                        if (imgbbUrl) {
-                            uploadedUrls.push(imgbbUrl);
-                        }
-                    } catch (error) {
-                        console.error('Upload error:', error);
-                        uploadStatus.textContent = `Error uploading ${image.file.name}: ${error.message}`;
-                        uploadStatus.className = 'alert alert-danger';
-                        uploadStatus.style.display = 'block';
-                    }
-                }
-
-                // If we have successfully uploaded images
-                if (uploadedUrls.length > 0) {
-                    // Store the image URLs in localStorage
-                    const existingImages = JSON.parse(localStorage.getItem('weddingGallery') || '[]');
-                    uploadedUrls.forEach(url => {
-                        existingImages.push(url);
-                    });
-
-                    localStorage.setItem('weddingGallery', JSON.stringify(existingImages));
-
-                    // Update gallery
-                    updateGallery();
-
-                    // Show success message
-                    showToast(`${uploadedUrls.length} photo(s) uploaded successfully!`);
-
-                    // Close modal after a delay
-                    setTimeout(() => {
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
-                        modal.hide();
-
-                        // Reset upload form
-                        setTimeout(() => {
-                            progressBar.style.display = 'none';
-                            progressBarInner.style.width = '0%';
-                            progressBarInner.setAttribute('aria-valuenow', 0);
-                            progressBarInner.textContent = '0%';
-                            uploadedImagesContainer.innerHTML = '';
-                            uploadedImages = [];
-                            toggleSubmitButton();
-                            uploadStatus.style.display = 'none';
-                        }, 500);
-                    }, 1500);
-                } else {
-                    progressBar.style.display = 'none';
-                    submitBtn.disabled = false;
-                }
-            });
-
-            // Function to upload image to ImgBB
-            async function uploadToImgBB(file) {
-                const formData = new FormData();
-                formData.append('image', file);
-
-                // Using ImgBB API
-                const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                    method: 'POST',
-                    body: formData
+        // Initialize the Upload.io widget
+        const upload = new Upload({
+            apiKey: 'public_G22nhthCDRHzS2cc3dNdDL3rF8f5', // Replace with your Upload.io API key
+            multiple: true,
+            onComplete: (files) => {
+                // Display uploaded images in the gallery
+                files.forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = file.url;
+                    img.alt = file.name;
+                    img.style.width = '100px';
+                    img.style.margin = '5px';
+                    galleryContainer.appendChild(img);
                 });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    return data.data.url;
-                } else {
-                    throw new Error(data.error.message || 'Upload failed');
-                }
             }
-
-            // Initial gallery load
-            updateGallery();
-
-            // Reset modal when closed
-            document.getElementById('uploadModal').addEventListener('hidden.bs.modal', function () {
-                progressBar.style.display = 'none';
-                progressBarInner.style.width = '0%';
-                progressBarInner.setAttribute('aria-valuenow', 0);
-                progressBarInner.textContent = '0%';
-                uploadedImagesContainer.innerHTML = '';
-                uploadedImages = [];
-                toggleSubmitButton();
-                uploadStatus.style.display = 'none';
-            });
         });
 
-        // Initialize the slider
-        function initializeSlider() {
-            // Destroy existing instance if it exists
-            if (glide) {
-                try {
-                    glide.destroy();
-                } catch (e) {
-                    console.log("Glide instance already destroyed");
-                }
-            }
-
-            // Check if gallery has slides
-            const gallerySlides = document.getElementById('gallerySlides');
-            if (!gallerySlides || gallerySlides.children.length === 0) {
-                return;
-            }
-
-            // Create new instance with error handling
-            try {
-                glide = new Glide('#photoGallery', {
-                    type: 'carousel',
-                    perView: 3,
-                    gap: 20,
-                    autoplay: 4000,
-                    breakpoints: {
-                        992: {
-                            perView: 2
-                        },
-                        768: {
-                            perView: 1
-                        }
-                    }
-                });
-
-                glide.mount();
-            } catch (error) {
-                console.error("Error initializing Glide slider:", error);
-            }
-        }
-
-        // Load existing images from localStorage
-        function updateGallery() {
-            const images = JSON.parse(localStorage.getItem('weddingGallery') || '[]');
-            const gallerySlides = document.getElementById('gallerySlides');
-            const emptyGallery = document.getElementById('emptyGallery');
-            const galleryLoading = document.getElementById('galleryLoading');
-            const photoGallery = document.getElementById('photoGallery');
-
-            // Show loading
-            galleryLoading.style.display = 'block';
-            emptyGallery.style.display = 'none';
-            photoGallery.style.display = 'none';
-
-            setTimeout(() => {
-                if (images.length === 0) {
-                    if (gallerySlides) gallerySlides.innerHTML = '';
-                    emptyGallery.style.display = 'block';
-                    photoGallery.style.display = 'none';
-                    galleryLoading.style.display = 'none';
-                    return;
-                }
-
-                emptyGallery.style.display = 'none';
-                photoGallery.style.display = 'block';
-
-                if (gallerySlides) {
-                    gallerySlides.innerHTML = '';
-
-                    images.forEach(imgUrl => {
-                        const slide = document.createElement('div');
-                        slide.className = 'glide__slide';
-
-                        const link = document.createElement('a');
-                        link.href = imgUrl;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-
-                        const img = document.createElement('img');
-                        img.src = imgUrl;
-                        img.className = 'gallery-img img-fluid';
-                        img.alt = 'Wedding guest photo';
-
-                        link.appendChild(img);
-                        slide.appendChild(link);
-                        gallerySlides.appendChild(slide);
-                    });
-                }
-
-                // Reinitialize Glide with the new content
-                setTimeout(() => {
-                    initializeSlider();
-                }, 100);
-
-                // Hide loading
-                galleryLoading.style.display = 'none';
-            }, 500);
-        }
-
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toastMessage = document.getElementById('toastMessage');
-            const toastElement = document.querySelector('.toast');
-
-            if (toastMessage) toastMessage.textContent = message;
-
-            if (type === 'danger') {
-                toastElement.classList.remove('bg-success');
-                toastElement.classList.add('bg-danger');
-            } else {
-                toastElement.classList.remove('bg-danger');
-                toastElement.classList.add('bg-success');
-            }
-
-            if (toast) toast.show();
-        }
+        // Open the upload widget when the button is clicked
+        uploadBtn.addEventListener('click', () => {
+            upload.open();
+        });
     </script>
     <script src="js/main.js"></script>
 </body>
