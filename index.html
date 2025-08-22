@@ -40,7 +40,7 @@
     <!-- Navbar Start -->
     <nav class="navbar fixed-top shadow-sm navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-lg-5">
         <a href="index.html" class="navbar-brand d-block d-lg-none">
-            <h1 class="font-secondary text-white mb-n2">Sineka  <span class="text-primary">&</span> Loshana</h1>
+            <h1 class="font-secondary text-white mb-n2">Sineka <span class="text-primary">&</span> Loshana</h1>
         </a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -248,20 +248,15 @@
     <!-- Gallery Section -->
     <div class="container-fluid bg-gallery" id="gallery">
         <div class="section-title position-relative text-center" style="margin-bottom: 80px;">
-            <h3 class="text-uppercase  mb-3 " style="padding-top: 20px;letter-spacing: 3px;">Gallery</h3>
+            <h3 class="text-uppercase mb-3" style="padding-top: 20px; letter-spacing: 3px;">Gallery</h3>
             <h1 class="font-secondary display-4 text-white">Our Wedding Gallery</h1>
             <i class="far fa-heart text-white"></i>
         </div>
 
-        <!-- <div class="text-center mb-5">
-            <button id="uploadBtn"
-                class="inline-flex items-center px-6 py-3 bg-pink-500 text-white font-semibold rounded-full shadow-lg hover:bg-pink-600 transition-all duration-300">
-                <i class="fas fa-camera mr-2"></i> Upload Photos
-            </button>
-        </div> -->
+        <!-- Upload button -->
         <div class="text-center mb-5">
-            <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full" data-bs-toggle="modal"
-                data-bs-target="#uploadModal">
+            <input type="file" id="fileUpload" accept="image/*" capture="environment" hidden>
+            <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full">
                 <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
             </button>
             <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
@@ -342,25 +337,35 @@
     <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
     <script>
         const gallery = document.getElementById("wedding-gallery");
-
-        // Upload button
         const uploadBtn = document.getElementById("uploadBtn");
+        const fileUpload = document.getElementById("fileUpload");
+
+        // Open file picker when button clicked
         uploadBtn.addEventListener("click", () => {
-            const widget = cloudinary.createUploadWidget({
-                cloudName: "dxpxhp9vw",
-                uploadPreset: "wedding_gallery_preset", // unsigned preset
-                sources: ["local", "camera", "url"],
-                multiple: true,
-                folder: "wedding_gallery",
-                tags: ["wedding"]
-            }, (error, result) => {
-                if (!error && result && result.event === "success") {
-                    fetchImages(); // Refresh gallery after upload
-                }
-            });
-            widget.open();
+            fileUpload.click();
         });
 
+        // Handle file selection
+        fileUpload.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Upload to Cloudinary unsigned preset
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "wedding_gallery_preset"); // use your unsigned preset
+            formData.append("folder", "wedding_gallery");
+
+            const res = await fetch("https://api.cloudinary.com/v1_1/dxpxhp9vw/image/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            console.log("Uploaded:", data.secure_url);
+
+            fetchImages(); // refresh gallery after upload
+        });
         // Fetch all images via serverless function
         async function fetchImages() {
             try {
