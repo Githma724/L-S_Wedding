@@ -334,31 +334,45 @@
 
 
     <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-    <!-- <script>
+    <script>
         const gallery = document.getElementById("wedding-gallery");
         const uploadBtn = document.getElementById("uploadBtn");
-       
 
-        uploadBtn.addEventListener("click", () => {
-            const widget = cloudinary.createUploadWidget({
-                cloudName: "dxpxhp9vw",
-                uploadPreset: "wedding_gallery_preset", // unsigned preset
-                sources: ["local", "camera", "url"],
-                multiple: true,
-                folder: "wedding_gallery",
-                tags: ["wedding"]
-            }, (error, result) => {
-                if (!error && result && result.event === "success") {
-                    fetchImages(); // Refresh gallery after upload
+        // Create Cloudinary widget ONCE
+        const widget = cloudinary.createUploadWidget({
+            cloudName: "dxpxhp9vw",
+            uploadPreset: "wedding_gallery_preset",
+            sources: ["local", "camera", "url"],
+            multiple: true,
+            folder: "wedding_gallery",
+            tags: ["wedding"]
+        },
+            (error, result) => {
+                if (error) {
+                    console.error("Upload error:", error);
+                    return;
+                }
+
+                if (result.event === "success") {
+                    console.log("Uploaded:", result.info.secure_url);
+                    // Do not refresh for each file
+                }
+
+                if (result.event === "close") {
+                    // User finished uploading
+                    fetchImages(); // Refresh gallery once
                 }
             });
+
+        // Open widget on button click
+        uploadBtn.addEventListener("click", () => {
             widget.open();
-            
         });
+
         // Fetch all images via serverless function
         async function fetchImages() {
             try {
-                const res = await fetch("/.netlify/functions/get-images"); // call your serverless function
+                const res = await fetch("/.netlify/functions/get-images");
                 const images = await res.json();
                 if (!Array.isArray(images)) return;
                 gallery.innerHTML = "";
@@ -373,13 +387,13 @@
             }
         }
 
-        // Initial gallery load
+        // Initial load
         fetchImages();
 
         // Optional: auto-refresh every 15 seconds
         setInterval(fetchImages, 15000);
-    </script> -->
-    <script>
+    </script>
+    <!-- <script>
         const gallery = document.getElementById("wedding-gallery");
         const uploadBtn = document.getElementById("uploadBtn");
         const progressBar = document.getElementById("uploadProgress");
@@ -465,7 +479,7 @@
         // Initial load + auto refresh
         fetchImages();
         setInterval(fetchImages, 15000);
-    </script>
+    </script> -->
     <script src="js/main.js"></script>
 </body>
 
