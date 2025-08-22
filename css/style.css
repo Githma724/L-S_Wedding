@@ -6564,7 +6564,7 @@ a.close.disabled {
 .carousel-control-next {
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: 5;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -6608,6 +6608,7 @@ a.close.disabled {
   width: 20px;
   height: 20px;
   background: no-repeat 50% / 100% 100%;
+ 
 }
 
 .carousel-control-prev-icon {
