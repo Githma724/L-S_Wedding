@@ -219,25 +219,35 @@ figure {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 } */
 #wedding-gallery {
-    column-count: 2; /* mobile */
-    column-gap: 1rem;
+  column-count: 2;
+  /* mobile */
+  column-gap: 1rem;
 }
 
-@media(min-width:768px){
-    #wedding-gallery {
-        column-count: 4; /* desktop */
-    }
+@media(min-width:768px) {
+  #wedding-gallery {
+    column-count: 4;
+    /* desktop */
+  }
 }
 
 #wedding-gallery img {
-    width: 100%;
-    margin-bottom: 1rem;
-    border-radius: 0.75rem;
-    transition: transform 0.3s;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  transition: transform 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  touch-action: manipulation;
 }
+
 #wedding-gallery img:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
+
 svg {
   overflow: hidden;
   vertical-align: middle;
@@ -6608,7 +6618,7 @@ a.close.disabled {
   width: 20px;
   height: 20px;
   background: no-repeat 50% / 100% 100%;
- 
+
 }
 
 .carousel-control-prev-icon {
