@@ -248,7 +248,21 @@ figure {
 #wedding-gallery img:active {
   transform: scale(1.08);
 }
+/* Make the Cloudinary widget close button larger and more touch-friendly */
+.cloudinary-button.cloudinary-button-close {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 28px !important;
+    z-index: 10000 !important;
+}
 
+/* Alternatively, if the above doesn't work, try this more specific selector */
+div[data-test="upload-widget"] > div:first-child > button {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 28px !important;
+    z-index: 10000 !important;
+}
 svg {
   overflow: hidden;
   vertical-align: middle;
