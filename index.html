@@ -262,13 +262,19 @@
         </div>
 
         <!-- Upload button -->
-        <div class="text-center mb-5">
+        <!-- <div class="text-center mb-5">
             <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full">
                 <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
             </button>
             <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
+        </div> -->
+        <div class="text-center mb-5">
+            <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full">
+                <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
+            </button>
+            <input type="file" id="fileInput" accept="image/*" multiple style="display: none;" />
+            <p class="text-white mt-3">Help us capture every special moment by sharing your photos!</p>
         </div>
-
         <div id="wedding-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 px-2 pb-10"></div>
     </div>
 
@@ -352,6 +358,21 @@
 
         // Open widget on button click
         uploadBtn.onclick = function () {
+            // widget.open();
+            const widget = cloudinary.createUploadWidget({
+                cloudName: "dxpxhp9vw",
+                uploadPreset: "wedding_gallery_preset",
+                sources: ["local", "url"], // leave out camera if causing issues
+                multiple: true,
+                maxFiles: 20,
+                folder: "wedding_gallery",
+                tags: ["wedding"]
+            }, (error, result) => {
+                if (error) console.error(error);
+                if (result.event === "success") appendImage(result.info.secure_url);
+                if (result.event === "queues-end") fetchImages();
+            });
+
             widget.open();
         };
 
