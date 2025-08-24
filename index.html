@@ -261,7 +261,6 @@
             <i class="far fa-heart text-white"></i>
         </div>
 
-        <!-- Upload button -->
         <div class="text-center mb-5">
             <button id="uploadBtn" class="btn btn-primary btn-lg upload-btn rounded-full">
                 <i class="fas fa-cloud-upload-alt me-2"></i> Upload Your Photos
@@ -315,197 +314,76 @@
     <!-- Glide.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
 
-    <!-- Countdown Script -->
-    <!-- <script>
-        const weddingDate = new Date("Sep 4, 2025 00:00:00").getTime();
-
-        function updateCountdown(daysId, hoursId, minutesId, secondsId) {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById(daysId).innerText = days;
-            document.getElementById(hoursId).innerText = hours;
-            document.getElementById(minutesId).innerText = minutes;
-            document.getElementById(secondsId).innerText = seconds;
-        }
-
-        setInterval(() => {
-            updateCountdown("days1", "hours1", "minutes1", "seconds1");
-            updateCountdown("days2", "hours2", "minutes2", "seconds2");
-        }, 1000);
-    </script> -->
-
 
     <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
     <script>
         const gallery = document.getElementById("wedding-gallery");
         const uploadBtn = document.getElementById("uploadBtn");
 
-        // Create Cloudinary widget ONCE
         const widget = cloudinary.createUploadWidget({
             cloudName: "dxpxhp9vw",
             uploadPreset: "wedding_gallery_preset",
             sources: ["local", "camera", "url"],
             multiple: true,
+            maxFiles: 20,
+            maxImageFileSize: 5 * 1024 * 1024, // 5 MB
+            clientAllowedFormats: ["jpg", "jpeg", "png", "webp"],
             folder: "wedding_gallery",
-            tags: ["wedding"]
-        },
-            (error, result) => {
-                if (error) {
-                    console.error("Upload error:", error);
-                    return;
-                }
+            tags: ["wedding"],
+            use_filename: true,
+            unique_filename: false
+        }, (error, result) => {
+            if (error) {
+                console.error("Upload error:", error);
+                return;
+            }
 
-                if (result.event === "success") {
-                    console.log("Uploaded:", result.info.secure_url);
-                    // Do not refresh for each file
-                }
-
-                if (result.event === "close") {
-                    // User finished uploading
-                    fetchImages(); // Refresh gallery once
-                }
-            });
-
-        // Open widget on button click
-        uploadBtn.addEventListener("click", () => {
-            widget.open();
+            if (result.event === "queues-end") {
+                fetchImages(); // Refresh once after all uploads complete
+            }
         });
 
-        // Fetch all images via serverless function
+        uploadBtn.addEventListener("click", () => widget.open());
+
         async function fetchImages() {
             try {
                 const res = await fetch("/.netlify/functions/get-images");
                 const images = await res.json();
                 if (!Array.isArray(images)) return;
+
                 gallery.innerHTML = "";
-                // images.forEach(url => {
-                //     const img = document.createElement("img");
-                //     img.src = url;
-                //     img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
-                //     gallery.appendChild(img);
-                // });
-                // Add images as <a> links for lightbox
+
                 images.forEach(url => {
+                    const thumbUrl = url.replace("/upload/", "/upload/w_300,q_70,f_auto,q_auto/");
                     const link = document.createElement("a");
-                    link.href = url;             // full-size image
+                    link.href = url;
                     link.className = "glightbox";
 
                     const img = document.createElement("img");
-                    img.src = url;               // thumbnail
+                    img.src = thumbUrl;
+                    img.loading = "lazy";
+                    img.alt = "Wedding photo";
                     img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
 
                     link.appendChild(img);
                     gallery.appendChild(link);
                 });
 
-                // Re-initialize lightbox each time
-                if (lightbox) lightbox.destroy(); // destroy previous instance
-                lightbox = GLightbox({ selector: '.glightbox', touchNavigation: true, loop: true, zoomable: true });
-
-            } catch (err) {
-                console.error("Error fetching gallery images:", err);
-            }
-        }
-
-        // Initial load
-        fetchImages();
-
-        // Optional: auto-refresh every 15 seconds
-        setInterval(fetchImages, 15000);
-    </script>
-    <!-- <script>
-        const gallery = document.getElementById("wedding-gallery");
-        const uploadBtn = document.getElementById("uploadBtn");
-        const progressBar = document.getElementById("uploadProgress");
-
-        // Create Cloudinary widget ONCE
-        const widget = cloudinary.createUploadWidget({
-            cloudName: "dxpxhp9vw",
-            uploadPreset: "wedding_gallery_preset",
-            sources: ["local", "camera", "url"],
-            multiple: true,
-            folder: "wedding_gallery",
-            tags: ["wedding"],
-            styles: {
-                palette: {
-                    window: "#ffffff",
-                    sourceBg: "#f4f4f4",
-                    windowBorder: "#90a0b3",
-                    tabIcon: "#000000",
-                    menuIcons: "#555a5f",
-                    textDark: "#000000",
-                    textLight: "#ffffff",
-                    link: "#0078ff",
-                    action: "#0078ff",
-                    inactiveTabIcon: "#cccccc",
-                    error: "#f44235",
-                    inProgress: "#0078ff",
-                    complete: "#20b832",
-                    sourceBorder: "#dddddd",
-                    sourceBorderHover: "#aaaaaa",
-                    buttons: "#0078ff"
-                },
-                fonts: {
-                    "'Poppins', sans-serif": "https://fonts.googleapis.com/css?family=Poppins"
-                }
-            }
-        },
-            (error, result) => {
-                if (error) {
-                    console.error("Upload error:", error);
-                    return;
-                }
-                // Upload in progress
-                if (result.event === "upload-added") {
-                    progressBar.style.width = "0%";
-                    progressBar.parentElement.style.display = "block";
-                }
-                if (result.event === "upload-progress") {
-                    progressBar.style.width = result.info.bytes_transferred / result.info.bytes_total * 100 + "%";
-                }
-                if (result.event === "success") {
-                    console.log("Uploaded:", result.info.secure_url);
-                    fetchImages(); // refresh gallery
-                    progressBar.style.width = "100%";
-                    setTimeout(() => progressBar.parentElement.style.display = "none", 1000);
-                }
-            }
-        );
-
-        // Button opens widget
-        uploadBtn.addEventListener("click", () => {
-            widget.open();
-        }, false);
-
-        // Fetch gallery images
-        async function fetchImages() {
-            try {
-                const res = await fetch("/.netlify/functions/get-images");
-                const images = await res.json();
-                if (!Array.isArray(images)) return;
-
-                gallery.innerHTML = "";
-                images.forEach(url => {
-                    const img = document.createElement("img");
-                    img.src = url;
-                    img.className = "rounded-xl shadow-lg w-full h-auto object-cover";
-                    gallery.appendChild(img);
+                if (window.lightbox) window.lightbox.destroy();
+                window.lightbox = GLightbox({
+                    selector: '.glightbox',
+                    touchNavigation: true,
+                    loop: true,
+                    zoomable: true
                 });
             } catch (err) {
                 console.error("Error fetching gallery images:", err);
             }
         }
 
-        // Initial load + auto refresh
-        fetchImages();
-        setInterval(fetchImages, 15000);
-    </script> -->
+        fetchImages(); // Initial gallery load
+        // Removed polling via setInterval to avoid unnecessary refreshes.
+    </script>
     <script src="js/main.js"></script>
 </body>
 
