@@ -326,7 +326,7 @@
             sources: ["local", "camera", "url"],
             multiple: true,
             maxFiles: 20,
-            maxImageFileSize: 5 * 1024 * 1024, // 5 MB
+            maxImageFileSize: 5 * 1024 * 1024,
             clientAllowedFormats: ["jpg", "jpeg", "png", "webp"],
             folder: "wedding_gallery",
             tags: ["wedding"],
@@ -339,11 +339,14 @@
             }
 
             if (result.event === "queues-end") {
-                fetchImages(); // Refresh once after all uploads complete
+                fetchImages();
             }
         });
 
-        uploadBtn.addEventListener("click", () => widget.open());
+        // Ensure the widget is opened by a direct user action
+        uploadBtn.onclick = function () {
+            widget.open();
+        };
 
         async function fetchImages() {
             try {
@@ -376,13 +379,13 @@
                     loop: true,
                     zoomable: true
                 });
+
             } catch (err) {
                 console.error("Error fetching gallery images:", err);
             }
         }
 
-        fetchImages(); // Initial gallery load
-        // Removed polling via setInterval to avoid unnecessary refreshes.
+        fetchImages(); // Initial load
     </script>
     <script src="js/main.js"></script>
 </body>
