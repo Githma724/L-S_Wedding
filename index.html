@@ -358,21 +358,6 @@
 
         // Open widget on button click
         uploadBtn.onclick = function () {
-            // widget.open();
-            const widget = cloudinary.createUploadWidget({
-                cloudName: "dxpxhp9vw",
-                uploadPreset: "wedding_gallery_preset",
-                sources: ["local", "url"], // leave out camera if causing issues
-                multiple: true,
-                maxFiles: 20,
-                folder: "wedding_gallery",
-                tags: ["wedding"]
-            }, (error, result) => {
-                if (error) console.error(error);
-                if (result.event === "success") appendImage(result.info.secure_url);
-                if (result.event === "queues-end") fetchImages();
-            });
-
             widget.open();
         };
 
